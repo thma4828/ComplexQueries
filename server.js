@@ -2,9 +2,8 @@ var mysql = require('mysql');
 var express = require('express');
 var app = express();
 var fs = require('fs');
+var funcMod = require('./filemod');
 
-//var redfile = fs.readFileSync('querylog.txt', 'utf8'); reading a file
-//writing a file: fs.writeFileSync('querylog.txt', data);
 
 //create connection variable with mySQL module.
 var con = mysql.createConnection({
@@ -148,8 +147,8 @@ app.get('/query_one_b', function(req, res){
                 response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';
             }
             
-        }else{
-            if(include_oid && include_cid && include_od && !include_freight){
+        }else{ //some variation of the 14 ways we could combine any subset of the elements. 
+            if(include_oid && include_cid && include_od && !include_freight){ //1
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
@@ -158,7 +157,7 @@ app.get('/query_one_b', function(req, res){
                 }
                 
 
-            }else if(include_oid && include_cid && !include_od && !include_freight){
+            }else if(include_oid && include_cid && !include_od && !include_freight){ //2
                    for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
@@ -166,14 +165,14 @@ app.get('/query_one_b', function(req, res){
                     
                 }
              
-            }else if(include_oid && !include_cid && !include_od && !include_freight){
+            }else if(include_oid && !include_cid && !include_od && !include_freight){ //3
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
                 }
                
 
-            }else if(include_oid && include_cid && !include_od && include_freight){
+            }else if(include_oid && include_cid && !include_od && include_freight){ //4
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
@@ -182,7 +181,7 @@ app.get('/query_one_b', function(req, res){
                 }
               
             
-            }else if(!include_oid && include_cid && include_od && include_freight){
+            }else if(!include_oid && include_cid && include_od && include_freight){ //5
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Customer ID: </h3>' + rows[j].CustomerID + '<br>';
@@ -191,7 +190,7 @@ app.get('/query_one_b', function(req, res){
                 }
             
 
-            }else if(include_oid && !include_cid && include_od && include_freight){
+            }else if(include_oid && !include_cid && include_od && include_freight){ //6
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
@@ -199,48 +198,48 @@ app.get('/query_one_b', function(req, res){
                     response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';
                 }
             
-            }else if(!include_oid && include_cid && !include_od && !include_freight){
+            }else if(!include_oid && include_cid && !include_od && !include_freight){ //7
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Customer ID: </h3>' + rows[j].CustomerID + '<br>';
                 }
               
-            }else if(!include_oid && !include_cid && include_od && !include_freight){
+            }else if(!include_oid && !include_cid && include_od && !include_freight){ //8
                 for(j=0; j<length; j++){
                     response_ += '<br>';
                     response_ += '<h3>The Order Date: </h3>' + rows[j].OrderDate + '<br>';
                 }
                 
-            }else if(!include_oid && !include_cid && !include_od && include_freight){
+            }else if(!include_oid && !include_cid && !include_od && include_freight){ //9
                 for(j=0; j<length; j++){
                     response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';
                 }
               
-            }else if(!include_oid && include_cid && !include_od && include_freight){
+            }else if(!include_oid && include_cid && !include_od && include_freight){ //10
                 for(j=0; j<length; j++){
                     response_ += '<h3>The Customer ID: </h3>' + rows[j].CustomerID + '<br>';
                     response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';   
                 }
             
-            }else if(include_oid && !include_cid && include_od && !include_freight){
+            }else if(include_oid && !include_cid && include_od && !include_freight){ //11
                 for(j=0; j<length; j++){
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
                     response_ += '<h3>The Order Date: </h3>' + rows[j].OrderDate + '<br>';
                 }
             
-            }else if(include_oid && !include_cid && !include_od && include_freight){
+            }else if(include_oid && !include_cid && !include_od && include_freight){ //12
                 for(j=0; j<length; j++){
                     response_ += '<h3>The Order ID: </h3>' + rows[j].OrderID +'<br>';
                     response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';   
                 }
                 
-            }else if(!include_oid && include_cid && include_od && !include_freight){
+            }else if(!include_oid && include_cid && include_od && !include_freight){ //13
                 for(j=0; j<length; j++){
                     response_ += '<h3>The Customer ID: </h3>' + rows[j].CustomerID + '<br>';
                     response_ += '<h3>The Order Date: </h3>' + rows[j].OrderDate + '<br>';
                 }
                
-            }else if(!include_oid && !include_cid && include_od && include_freight){
+            }else if(!include_oid && !include_cid && include_od && include_freight){ //14, which is = C(4,3) + C(4,2,) + C(4,1) = 14!
                     for(j=0; j<length; j++){
                         response_ += '<h3>The Order Date: </h3>' + rows[j].OrderDate + '<br>';
                         response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';   
@@ -249,26 +248,43 @@ app.get('/query_one_b', function(req, res){
             }
             
         }
+        freight_array = [];
         if(mFreight && include_freight){
             var mean_f = 0.0;
             for(p=0; p<length; p++){
-                mean_f += parseFloat(rows[p].Freight);
+                var fr = parseFloat(rows[p].Freight);
+                mean_f += fr;
+                freight_array.push(fr);
             }
+            var tnf = req.query.TNF;
+            var n = parseInt(req.query.N);
+
+            
             mean_f = mean_f / length;
             console.log(" the mean freight is: ", mean_f);
           
             response_ += '<h2>The Mean Freight: </h3>' + mean_f + '<br>';
+            resp2 = '<br><h2>last ' + n + ' freight values:</h2><br>';
+            if(tnf && (n < length)){
+                for(z=0; z<n; z++){
+                    resp2 += '<h3>freight #' + (z+1) + ' = ' + rows[z].Freight + '</h3><br>';
+                }
+                response_ += resp2;
+            }else if(n >= length){
+                console.log("error: user trying to print too many freight values")
+            }
             
         }else if(mFreight && !include_freight){
             console.log("error: user trying to calculate mean freight, but didn't include freight in the query.");
+        }else if(req.query.TNF && !include_freight){
+            console.log("error: user trying to print the last N freight values, but didn't include freight in the query");
         }
-            
-        response_ += '<br><br><form action="http://127.0.0.1:8080/" method="get"><input type="submit" value="click here to try another query!" name="Submit" id="frm1_submit" /></form><br>';
-        fs.writeFileSync('htmlLog.txt', response_);
+           
+        response_ += '<br><br><form action="http://127.0.0.1:8080/" method="get"><input type="submit" value="click here to try another query." name="Submit" id="frm1_submit" /></form><br>';
+        funcMod(response_); //this is my module stored in filemod.js that logs the most recent html query result to a file on the server. 
         res.send(response_);
         console.log("resulting html logged to htmlLog.txt");
         console.log("number of query results returned: ", length);
-        //con.end();     dont actually end the connection here, this makes it so they cant go back and try more queries.... 
     });
 });
 
