@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Complex Queries, A Project in NodeJS</title>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #top-bar-container {position: relative}
+            #top-bar {position: absolute; top: 25px; right: 250px; width: 1000px; height: 1000px; background-color: appworkspace}
+
+            #sidebar-container {position: relative}
+            #sidebar {position: absolute; top: 25px; left: 0px; width: 70px; height: 1000px; background-color: appworkspace}
+
+            #rightbar-container {position: relative}
+            #rightbar {position: absolute; top: 25px; left: 1085px; width: 300px; height: 1000px; background-color: gainsboro}
+
+            #lowbar-container {position: relative}
+            #lowbar {position: absolute; top: 785px; right: 250px; width: 1000px; height: 500px; background-color: gainsboro}
+        </style>
+    </head>
+    <div id="top-bar-container">
+        <div id="top-bar">
+            <div id="inner-bar">
+                <p>Select Query Options for table: orders</p>
+                
+                <form action="http://127.0.0.1:8080/query_one_b" method="GET">
+                    <p>First lets select the fields from the orders table that we want to select</p>
+                     <input type="checkbox" name="OID">OrderID<br>
+                     <input type="checkbox" name="CID">CustomerID<br>
+                     <input type="checkbox" name="OD">Order Date<br>
+                     <input type="checkbox" name="FR">Freight<br>
+                     <p>Now, lets set the conditions for the query</p>
+                     <input type="checkbox" name="SSC">Do you want to specify the shipping country?<br>
+                     <p>Shipping Countrys: {USA, BRAZIL, GERMANY, AUSTRAILIA, ITALY, MEXICO</p>
+                     <input type="text" name="ShipCountry" size="30">
+                     <br>
+                     <br>
+                     <input type="checkbox" name="LBF">Do you want to specify the shipping freight within a given range?<br>
+                     <p>Min:</p>
+                     <input type="text" name="minf" size="10">
+                     <br>
+                     <p>Max:</p>
+                     <input type="text" name="maxf" size="10">
+                     <br>
+                     <br>
+                     <input type="checkbox" name="OBF">Do you want to order the results by freight?<br>
+                     <br>
+                     <input type="checkbox" name="DESC">Do you want to order in descending order?<br>
+                     <br>
+                     <input type="checkbox" name="MF">Do you want to display the mean freight of the query result?<br>
+                     <br>
+                     <input type="submit" id="Submit" value="Submit" class="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="sidebar-container">
+        <div id="sidebar">
+            <h6>by Theodore Margoles</h6>
+        </div>
+    </div>
+    <div id="rightbar-container">
+        <div id="rightbar"></div>
+        
+    </div>
+    <div id="lowbar-container">
+        <div id="lowbar">
+            
+           
+        </div>
+    </div>
+</html>
