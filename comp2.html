@@ -15,7 +15,7 @@
             #rightbar {position: absolute; top: 25px; left: 1085px; width: 300px; height: 1000px; background-color: gainsboro}
 
             #lowbar-container {position: relative}
-            #lowbar {position: absolute; top: 850px; right: 250px; width: 1000px; height: 500px; background-color: gainsboro}
+            #lowbar {position: absolute; top: 1000px; right: 250px; width: 1000px; height: 500px; background-color: gainsboro}
         </style>
     </head>
     <div id="top-bar-container">
@@ -49,9 +49,16 @@
                      <br>
                      <input type="checkbox" name="MF">Do you want to display the mean freight of the query result?<br>
                      <br>
-                     <input type="checkbox" name="TNF">Do you want to display the last N freight values<br>
-                     <p>enter N below:</p>
-                     <input type="text" name="N"><br><br>
+                     <input type="checkbox" name="TNF">Do you want to display the top N freight values?<br>
+                     <input type="checkbox" name="BMF">Do you want to display the bottom M freight values?<br>
+                     <p>Enter N below:</p>
+                     <input type="text" name="N" size="10"><br><br>
+                     <p>Enter M below:</p>
+                     <input type="text" name="M" size="10"><br><br>
+                     
+                     <input type="checkbox" name="MTNF">Do you want to display the mean of the top N freight values?<br>
+                     <input type="checkbox" name="MBMF">Do you want to display the mean of the botton M freight values?<br>
+                     
                      <input type="submit" id="Submit" value="Submit" class="submit">
                 </form>
             </div>
