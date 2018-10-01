@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Login</title>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {background-color: appworkspace}
+        </style>
+    </head>
+    <body>
+        <div>Authenticate Yourself To Use Complex Queries</div>
+        <form action = "http://127.0.0.1:8080/login" id="q1" class="QUERY" method="GET">
+             <p>Username:</p>
+             <input type="text" name="username" size="50">
+             <br>
+             <p>Passkey:</p>
+             <input type="text" name="passkey" size="50">
+             <br>
+             <p>First Name: </p>
+             <input type="text" name="fname" size="50">
+             <br>
+             <p>Last Name:</p>
+             <input type="text" name="lname" size="50"><br>
+             <input type="submit" id="Submit" value="Submit" class="submit">
+        </form>
+        <br><br>
+        <div>Or Create A New Account Below</div>
+        <form action = "http://127.0.0.1:8080/create" id="q1" class="QUERY" method="GET">
+             <p>Username:</p>
+             <input type="text" name="username" size="50">
+             <br>
+             <p>Passkey:</p>
+             <input type="text" name="passkey" size="50">
+             <br>
+             <p>First Name: </p>
+             <input type="text" name="fname" size="50">
+             <br>
+             <p>Last Name:</p>
+             <input type="text" name="lname" size="50"><br>
+             <input type="submit" id="Submit" value="Submit" class="submit">
+        </form>
+    </body>
+</html>

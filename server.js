@@ -9,7 +9,7 @@ var fmod2 = require('./filemod2');
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'rythmic8480',
+    password: 'rythmic8480', 
     database: 'northwinds'
 });
 
@@ -20,7 +20,51 @@ con.connect(function(err) {
 
 //default get request to myip:8080/
 app.get('/', function(req, res) {
-        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
+        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/login.html");
+});
+
+app.get('/create', function(req, res) {
+    var user = req.query.username;
+    var pass = req.query.passkey;
+    var fname = req.query.fname;
+    var lname = req.query.lname;
+    var insertString = '';
+    insertString += 'insert into users(username, passkey, firstName, lastName) values(' + "'" + user+ "'" + ',' + "'" +pass+ "'" + ',' + "'" +fname + "'" + ',' + "'" +lname+ "'" + ');';
+    console.log("insert string: ", insertString);
+    con.query(insertString, function(err, rows, fields){
+        if(err){
+            console.log("user not created");
+            throw err;
+        }else{
+            console.log("success, user created");
+            res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/login.html");
+        }
+    });
+});
+
+app.get('/login', function(req, res) {
+    var userName = req.query.username;
+    var passKey = req.query.passkey;
+    var firstName = req.query.fname;
+    var lastName = req.query.lname;
+    var qstring = '';
+    qstring += 'select * from users where ';
+    qstring += 'username = ' + "'" + userName + "'" + ' and passkey = ' + "'" + passKey + "'" + ' and firstName = ' + "'" + firstName + "'" + ' and lastName = ' + "'" +lastName + "'" + ';';
+    console.log("query string", qstring);
+    con.query(qstring, function(err, rows, fields){
+        if(err) throw err;
+        if(rows.length < 1){
+            res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+            res.sendFile("auth failure");
+        }else if(rows.length == 1){
+            console.log("auth success");
+            res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
+        }
+    });
+});
+
+app.get('/backhome', function(req, res) {
+    res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
 });
 
 //for first query from comp.html 
@@ -148,7 +192,7 @@ app.get('/query_one_b', function(req, res){
     con.query(s1, function(err, rows, fields){
         if(err) throw err;
         var response_ = '<h1>results of query listed below</h1><br>';
-        response_ += '<br><br><form action="http://127.0.0.1:8080/" method="get"><input type="submit" value="click here to try another query." name="Submit2" id="frm2_submit" /></form><br>';
+        response_ += '<br><br><form action="http://127.0.0.1:8080/backhome" method="get"><input type="submit" value="click here to try another query." name="Submit2" id="frm2_submit" /></form><br>';
 
         var length = rows.length;
         if(all == 1){ //if we chose to select all fields. this is the easy case
@@ -331,7 +375,7 @@ app.get('/query_one_b', function(req, res){
             console.log('error: user trying to print mean of bottom m values but didnt want to calculate those values in the first place.');
         }
             
-        response_ += '<br><br><form action="http://127.0.0.1:8080/" method="get"><input type="submit" value="click here to try another query." name="Submit" id="frm1_submit" /></form><br>';
+        response_ += '<br><br><form action="http://127.0.0.1:8080/backhome" method="get"><input type="submit" value="click here to try another query." name="Submit" id="frm1_submit" /></form><br>';
         funcMod(response_); //this is my module stored in filemod.js that logs the most recent html query result to a file on the server. 
         res.send(response_);
         console.log("resulting html logged to htmlLog.txt");

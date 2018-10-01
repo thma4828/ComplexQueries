@@ -1,3 +1,8 @@
 select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'GERMANY' and Freight > 11 and Freight < 77
 select CustomerID, OrderDate, Freight from nworders where Freight >= 100 and Freight <= 123
 select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'USA' order by Freight desc;select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'BRAZIL' and Freight > 1 and Freight < 167
+select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'GERMANY' and Freight > 15 and Freight < 100
+select OrderID, OrderDate, Freight from nworders where ShipCountry = 'BRAZIL' and Freight > 0 and Freight < 100
+
+select CustomerID, OrderDate, Freight from nworders
+select CustomerID, OrderDate, Freight from nworders
