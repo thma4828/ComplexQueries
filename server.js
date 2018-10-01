@@ -9,7 +9,7 @@ var fmod2 = require('./filemod2');
 var con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'rythmic8480', 
+    password: 'rythmic8480',  //no i dont use this password elsewhere, don't even try
     database: 'northwinds'
 });
 
@@ -31,9 +31,9 @@ app.get('/create', function(req, res) {
     var p = pass.length;
     var hashSum = 0;
     for(j=0; j<p; j++){
-        hashSum = (hashSum + pass.charCodeAt(j));
+        hashSum = (hashSum + pass.charCodeAt(j)) * 13 * 541;
     }
-    hashSum = hashSum % 64;
+    hashSum = hashSum % 26171;
 
     var insertString = '';
     insertString += 'insert into users(username, passkey, firstName, lastName) values(' + "'" + user+ "'" + ',' + "'" +hashSum+ "'" + ',' + "'" +fname + "'" + ',' + "'" +lname+ "'" + ');';
@@ -55,9 +55,9 @@ app.get('/login', function(req, res) {
     var p = passKey.length;
     var hashSum = 0;
     for(j=0; j<p; j++){
-        hashSum = (hashSum + passKey.charCodeAt(j));
+        hashSum = (hashSum + passKey.charCodeAt(j)) * 13 * 541;
     }
-    hashSum = hashSum % 64;
+    hashSum = hashSum % 26171;
     var firstName = req.query.fname;
     var lastName = req.query.lname;
     var qstring = '';
@@ -135,9 +135,6 @@ app.get('/query_one_b', function(req, res){
         if(include_freight){
             s1 += "Freight ";
         }
-
-
-
     }else{
         s1 += "* ";
         all = 1;

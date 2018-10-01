@@ -6,3 +6,4 @@ select OrderID, OrderDate, Freight from nworders where ShipCountry = 'BRAZIL' an
 
 select CustomerID, OrderDate, Freight from nworders
 select CustomerID, OrderDate, Freight from nworders
+select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'MEXICO' and Freight > 1 and Freight < 15select OrderID from nworders
