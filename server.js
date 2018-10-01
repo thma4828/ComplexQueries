@@ -28,8 +28,15 @@ app.get('/create', function(req, res) {
     var pass = req.query.passkey;
     var fname = req.query.fname;
     var lname = req.query.lname;
+    var p = pass.length;
+    var hashSum = 0;
+    for(j=0; j<p; j++){
+        hashSum = (hashSum + pass.charCodeAt(j));
+    }
+    hashSum = hashSum % 64;
+
     var insertString = '';
-    insertString += 'insert into users(username, passkey, firstName, lastName) values(' + "'" + user+ "'" + ',' + "'" +pass+ "'" + ',' + "'" +fname + "'" + ',' + "'" +lname+ "'" + ');';
+    insertString += 'insert into users(username, passkey, firstName, lastName) values(' + "'" + user+ "'" + ',' + "'" +hashSum+ "'" + ',' + "'" +fname + "'" + ',' + "'" +lname+ "'" + ');';
     console.log("insert string: ", insertString);
     con.query(insertString, function(err, rows, fields){
         if(err){
@@ -45,11 +52,17 @@ app.get('/create', function(req, res) {
 app.get('/login', function(req, res) {
     var userName = req.query.username;
     var passKey = req.query.passkey;
+    var p = passKey.length;
+    var hashSum = 0;
+    for(j=0; j<p; j++){
+        hashSum = (hashSum + passKey.charCodeAt(j));
+    }
+    hashSum = hashSum % 64;
     var firstName = req.query.fname;
     var lastName = req.query.lname;
     var qstring = '';
     qstring += 'select * from users where ';
-    qstring += 'username = ' + "'" + userName + "'" + ' and passkey = ' + "'" + passKey + "'" + ' and firstName = ' + "'" + firstName + "'" + ' and lastName = ' + "'" +lastName + "'" + ';';
+    qstring += 'username = ' + "'" + userName + "'" + ' and passkey = ' + "'" + hashSum + "'" + ' and firstName = ' + "'" + firstName + "'" + ' and lastName = ' + "'" +lastName + "'" + ';';
     console.log("query string", qstring);
     con.query(qstring, function(err, rows, fields){
         if(err) throw err;
