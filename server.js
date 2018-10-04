@@ -5,6 +5,9 @@ var fs = require('fs');
 var funcMod = require('./filemod');
 var fmod2 = require('./filemod2');
 
+
+var isAuth = 0;
+
 //create connection variable with mySQL module.
 var con = mysql.createConnection({
     host: 'localhost',
@@ -71,17 +74,25 @@ app.get('/login', function(req, res) {
             res.sendFile("auth failure");
         }else if(rows.length == 1){
             console.log("auth success");
+            isAuth = 1;
             res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
         }
     });
 });
 
 app.get('/backhome', function(req, res) {
-    res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
+    if(isAuth){
+        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
+    }else{
+        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+    }
 });
 
 //for first query from comp.html 
 app.get('/query_one', function(req, res) {
+    if(!isAuth){
+        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+    }
     var tableName = req.query.TableName;
     console.log(tableName);
     switch(tableName){
@@ -103,6 +114,9 @@ app.get('/query_one', function(req, res) {
 });
 
 app.get('/query_one_b', function(req, res){
+    if(!isAuth){
+        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+    }
     var include_oid = req.query.OID;
     var include_cid = req.query.CID;
     var include_od = req.query.OD;
@@ -306,7 +320,7 @@ app.get('/query_one_b', function(req, res){
                     response_ += '<h3>The Order Date: </h3>' + rows[j].OrderDate + '<br>';
                 }
                
-            }else if(!include_oid && !include_cid && include_od && include_freight){ //14, which is = C(4,3) + C(4,2,) + C(4,1) = 14!
+            }else if(!include_oid && !include_cid && include_od && include_freight){ //14, which is = C(4,3) + C(4,2,) + C(4,1) = 14.
                     for(j=0; j<length; j++){
                         response_ += '<h3>The Order Date: </h3>' + rows[j].OrderDate + '<br>';
                         response_ += '<h3>Freight: </h3>' + rows[j].Freight + '<br>';   
