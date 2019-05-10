@@ -4,7 +4,14 @@ var app = express();
 var fs = require('fs');
 var funcMod = require('./filemod');
 var fmod2 = require('./filemod2');
+var download = require('download-file');
+var url = "https://i.imgur.com/glIMeWX.jpg";
+var dpath = "C:/Users/tsmar/Desktop/ComplexQueries/images.zip";
 
+var options = {
+    directory: "./images/animals/",
+    filename: "leapord.gif"
+}
 
 var isAuth = 0;
 
@@ -45,6 +52,7 @@ app.get('/create', function(req, res) {
         if(err){
             console.log("user not created");
             throw err;
+            res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html")
         }else{
             console.log("success, user created");
             res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/login.html");
@@ -92,6 +100,7 @@ app.get('/backhome', function(req, res) {
 app.get('/query_one', function(req, res) {
     if(!isAuth){
         res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+        res.end();
     }
     var tableName = req.query.TableName;
     console.log(tableName);
@@ -116,10 +125,12 @@ app.get('/query_one', function(req, res) {
 app.get('/query_one_b', function(req, res){
     if(!isAuth){
         res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+        res.end();
     }
     var include_oid = req.query.OID;
     var include_cid = req.query.CID;
     var include_od = req.query.OD;
+    var include_dl = req.query.DL;
     var include_freight = req.query.FR;
     var all = 0;
     var order_by_freight = req.query.OBF;
@@ -213,6 +224,20 @@ app.get('/query_one_b', function(req, res){
     }
     console.log("query string is |", s1, "|");
     fmod2(s1); //another custom module I build to save to a log. 
+    if(include_dl){
+        download(url, options, function(err){
+            if (err) throw err
+            console.log("yay animal photo downloaded to server");
+            fs.exists(dpath, function(exists){
+                if(exists){
+                    console.log("kitty exists.");
+                }else{
+                    console.log("kitty no is here");
+                    res.end("Error: download does not exist");
+                }
+            });
+        }) 
+    }
     con.query(s1, function(err, rows, fields){
         if(err) throw err;
         var response_ = '<h1>results of query listed below</h1><br>';
