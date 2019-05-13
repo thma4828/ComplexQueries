@@ -7,6 +7,8 @@ var fmod2 = require('./filemod2');
 var download = require('download-file');
 var url = "https://i.imgur.com/glIMeWX.jpg";
 var dpath = "C:/Users/tsmar/Desktop/ComplexQueries/images.zip";
+var crypto = require('crypto');
+
 
 var options = {
     directory: "./images/animals/",
@@ -132,6 +134,7 @@ app.get('/query_one_b', function(req, res){
     var include_od = req.query.OD;
     var include_dl = req.query.DL;
     var include_freight = req.query.FR;
+    var include_hmac = req.query.HMAC;
     var all = 0;
     var order_by_freight = req.query.OBF;
     var desc = req.query.DESC;
@@ -237,6 +240,9 @@ app.get('/query_one_b', function(req, res){
                 }
             });
         }) 
+    }
+    if(include_hmac){
+        console.log("hashing query string");
     }
     con.query(s1, function(err, rows, fields){
         if(err) throw err;
@@ -423,7 +429,12 @@ app.get('/query_one_b', function(req, res){
         }else if(mbmf && !bmf){
             console.log('error: user trying to print mean of bottom m values but didnt want to calculate those values in the first place.');
         }
-            
+        if(include_hmac){
+            hash = crypto.createHmac('sha256', s1).digest('hex');
+            console.log("hash of query string: ", hash);
+            response_ += '<h3>Hash of query string: </h3>' + hash + '<br><br>';
+            fmod2(hash);
+        }    
         response_ += '<br><br><form action="http://127.0.0.1:8080/backhome" method="get"><input type="submit" value="click here to try another query." name="Submit" id="frm1_submit" /></form><br>';
         funcMod(response_); //this is my module stored in filemod.js that logs the most recent html query result to a file on the server. 
         res.send(response_);

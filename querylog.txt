@@ -20,3 +20,13 @@ select CustomerID, OrderDate, Freight from nworders
 select * from nworders
 select * from nworders
 select * from nworders
+select * from nworders where ShipCountry = 'MEXICO'
+select * from nworders where ShipCountry = 'USA'
+select CustomerID, OrderDate, Freight from nworders
+select CustomerID, OrderDate, Freight from nworders
+select CustomerID, OrderDate, Freight from nworders
+select CustomerID, OrderDate, Freight from nwordersselect CustomerID, OrderDate, Freight from nworders
+select OrderID, OrderDate, Freight from nworders where Freight >= 6 and Freight <= 145
+select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'ITALY'
+
+216d88594373460ef5236bc6318b9b6966318fd80a2464af8a5c055127b9a5c8
