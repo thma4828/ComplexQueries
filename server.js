@@ -4,6 +4,7 @@ var app = express();
 var fs = require('fs');
 var funcMod = require('./filemod');
 var fmod2 = require('./filemod2');
+//var buildQuery = require('./buildquery.js');
 var download = require('download-file');
 var url = "https://i.imgur.com/glIMeWX.jpg";
 var dpath = "C:/Users/tsmar/Desktop/ComplexQueries/images.zip";
@@ -40,15 +41,9 @@ app.get('/create', function(req, res) {
     var pass = req.query.passkey;
     var fname = req.query.fname;
     var lname = req.query.lname;
-    var p = pass.length;
-    var hashSum = 0;
-    for(j=0; j<p; j++){
-        hashSum = (hashSum + pass.charCodeAt(j)) * 13 * 541;
-    }
-    hashSum = hashSum % 26171;
-
+    hashP = crypto.createHmac('sha256', pass).digest('hex');
     var insertString = '';
-    insertString += 'insert into users(username, passkey, firstName, lastName) values(' + "'" + user+ "'" + ',' + "'" +hashSum+ "'" + ',' + "'" +fname + "'" + ',' + "'" +lname+ "'" + ');';
+    insertString += 'insert into users(username, passkey, firstName, lastName) values(' + "'" + user+ "'" + ',' + "'" +hashP+ "'" + ',' + "'" +fname + "'" + ',' + "'" +lname+ "'" + ');';
     console.log("insert string: ", insertString);
     con.query(insertString, function(err, rows, fields){
         if(err){
@@ -65,17 +60,14 @@ app.get('/create', function(req, res) {
 app.get('/login', function(req, res) {
     var userName = req.query.username;
     var passKey = req.query.passkey;
-    var p = passKey.length;
-    var hashSum = 0;
-    for(j=0; j<p; j++){
-        hashSum = (hashSum + passKey.charCodeAt(j)) * 13 * 541;
-    }
-    hashSum = hashSum % 26171;
+   
+    hashPass = crypto.createHmac('sha256', passKey).digest('hex');
+    
     var firstName = req.query.fname;
     var lastName = req.query.lname;
     var qstring = '';
     qstring += 'select * from users where ';
-    qstring += 'username = ' + "'" + userName + "'" + ' and passkey = ' + "'" + hashSum + "'" + ' and firstName = ' + "'" + firstName + "'" + ' and lastName = ' + "'" +lastName + "'" + ';';
+    qstring += 'username = ' + "'" + userName + "'" + ' and passkey = ' + "'" + hashPass + "'" + ' and firstName = ' + "'" + firstName + "'" + ' and lastName = ' + "'" +lastName + "'" + ';';
     console.log("query string", qstring);
     con.query(qstring, function(err, rows, fields){
         if(err) throw err;
@@ -86,6 +78,9 @@ app.get('/login', function(req, res) {
             console.log("auth success");
             isAuth = 1;
             res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/comp.html");
+        }else{
+            console.log("error: more than one user has same username and password....");
+            res.end();
         }
     });
 });
@@ -102,7 +97,7 @@ app.get('/backhome', function(req, res) {
 app.get('/query_one', function(req, res) {
     if(!isAuth){
         res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
-        res.end();
+       // res.end();
     }
     var tableName = req.query.TableName;
     console.log(tableName);
@@ -124,10 +119,41 @@ app.get('/query_one', function(req, res) {
     }
 });
 
+app.get('/query_customers', function(req, res){
+    if(!isAuth){
+        res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+        //
+    }
+    var byName = req.query.byName;
+    var byID = req.query.byCustomerID;
+    var identifier = req.query.identifier; //either name or CID, in string form. 
+    var ret_cid = req.query.cid;
+    var ret_compname = req.query.compname;
+    var ret_name = req.query.name;
+    var ret_city = req.query.city;
+    var ret_phone = req.query.phone;
+    var ret_address = req.query.address;
+    var ret_fax = req.query.fax;
+    var ret_orders = req.query.showorders;
+    
+    //I need a better way of building up the query string...  I should build a custom API. 
+   // if(byID == byName){
+    //    console.log("error: user wants to find customer by both CID and their name. Only one can be used.");
+  //      res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
+  //  }
+
+ //   var q = buildQuery(byName, byID, identifier, ret_cid, ret_compname, ret_name, ret_city, ret_phone, ret_address, ret_fax, ret_orders);
+ //   con.query(q, function(err, rows, fields){
+//        if err throw err; 
+ //       //now we need a better way of bulding the response. 
+ //   });
+    
+});
+
 app.get('/query_one_b', function(req, res){
     if(!isAuth){
         res.sendFile("C:/Users/tsmar/Desktop/ComplexQueries/failure.html");
-        res.end();
+        //res.end();
     }
     var include_oid = req.query.OID;
     var include_cid = req.query.CID;

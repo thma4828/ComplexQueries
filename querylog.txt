@@ -30,3 +30,5 @@ select OrderID, OrderDate, Freight from nworders where Freight >= 6 and Freight 
 select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'ITALY'
 
 216d88594373460ef5236bc6318b9b6966318fd80a2464af8a5c055127b9a5c8
+select OrderID, CustomerID, OrderDate from nworders
+select CustomerID, OrderDate, Freight from nworders where ShipCountry = 'GERMANY'
